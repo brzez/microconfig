@@ -1,13 +1,34 @@
 import uasyncio as asyncio
 
 container = dict()
+config = dict()
+modules_enabled = []
 
 
-def init(modules):
+def _load_config():
+    import ujson
+    global config, modules_enabled
+
+    def load_json(path, default):
+        try:
+            with open(path, 'r') as fh:
+                return ujson.loads(fh.read())
+        except OSError as e:
+            with open(path, 'w') as fh:
+                fh.write(ujson.dumps(default))
+
+            return default
+
+    config = load_json('config.json', dict())
+    modules_enabled = load_json('modules_enabled.json', [])
+
+
+def init():
     print('Microconfig init')
+    _load_config()
     loop = asyncio.PollEventLoop()
 
-    for module in modules:
+    for module in modules_enabled:
         _import_module(module)
 
     _register()
@@ -20,7 +41,7 @@ def _register():
     for (name, module) in container.items():
         try:
             print('{} - register'.format(name))
-            module.register()
+            module.register(config.get(name, dict()))
         except AttributeError:
             print('{} has no register()'.format(name))
 
@@ -59,6 +80,7 @@ def _import_module(name):
 
 
 def _run(loop):
+    print('Running...')
     try:
         loop.run_forever()
     except KeyboardInterrupt:

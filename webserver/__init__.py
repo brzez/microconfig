@@ -194,12 +194,6 @@ def redirect(path):
 
 def boot(container, loop):
     loop.create_task(server.run(loop))
-    # try:
-    #     loop.run_until_complete(server.run(loop))
-    # except KeyboardInterrupt:
-    #     print('Interrupted')  # This mechanism doesn't work on Unix build.
-    # finally:
-    #     server.close()
 
 
 def cleanup(container, loop):

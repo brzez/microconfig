@@ -2,7 +2,7 @@ from microconfig import init
 
 
 def test():
-    init(['heartbeat', 'webserver', 'info'])
+    init()
 
 # from webserver.form import form
 # from webserver import redirect, route, render_template, runserver
