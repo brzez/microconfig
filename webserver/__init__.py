@@ -1,7 +1,7 @@
 import uselect as select
 import uasyncio as asyncio
 
-from unquote import unquote
+from webserver.unquote import unquote
 
 try:
     import usocket as socket
@@ -192,11 +192,15 @@ def redirect(path):
     return '<script>window.location="{}"</script>'.format(path)
 
 
-def runserver():
-    loop = asyncio.get_event_loop()
-    try:
-        loop.run_until_complete(server.run(loop))
-    except KeyboardInterrupt:
-        print('Interrupted')  # This mechanism doesn't work on Unix build.
-    finally:
-        server.close()
+def boot(container, loop):
+    loop.create_task(server.run(loop))
+    # try:
+    #     loop.run_until_complete(server.run(loop))
+    # except KeyboardInterrupt:
+    #     print('Interrupted')  # This mechanism doesn't work on Unix build.
+    # finally:
+    #     server.close()
+
+
+def cleanup(container, loop):
+    server.close()
