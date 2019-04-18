@@ -9,6 +9,10 @@ def unquote(s):
     return ''.join(r)
 
 
+def _unquote_plus(s):
+    return unquote(s.replace('+', ' '))
+
+
 def unquote__(string):
     _hextobyte_cache = {}
 

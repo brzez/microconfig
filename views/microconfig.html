@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>microconfig</title>
+</head>
+<body>
+
+
+<form method="post">
+    <div>Modules enabled</div>
+    <textarea name="modules_enabled">{modules_enabled}</textarea>
+    <div>Config</div>
+    <textarea name="config">{config}</textarea>
+    <button type="submit">Save</button>
+</form>
+
+<form method="post">
+    <input type="hidden" name="command" value="reboot">
+    <button type="submit">Reboot</button>
+</form>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.45.0/codemirror.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.45.0/codemirror.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.45.0/mode/javascript/javascript.min.js"></script>
+
+<script>
+    const config = {{
+        mode: 'javascript'
+    }};
+
+    CodeMirror.fromTextArea(document.querySelector('textarea[name=modules_enabled]', config));
+    CodeMirror.fromTextArea(document.querySelector('textarea[name=config]', config))
+
+</script>
+
+</body>
+</html>

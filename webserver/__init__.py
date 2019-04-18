@@ -1,7 +1,7 @@
 import uselect as select
 import uasyncio as asyncio
 
-from webserver.unquote import unquote
+from webserver.unquote import _unquote_plus
 
 try:
     import usocket as socket
@@ -13,6 +13,19 @@ def render_template(name, **kwargs):
     with open(name, 'r') as file:
         content = file.read()
         return content.format(**kwargs)
+
+
+html_escape_table = {
+    "&": "&amp;",
+    '"': "&quot;",
+    "'": "&apos;",
+    ">": "&gt;",
+    "<": "&lt;",
+}
+
+
+def html_escape(text):
+    return "".join(html_escape_table.get(c, c) for c in text)
 
 
 class Request:
@@ -30,7 +43,7 @@ class Request:
         for v in data.split('&'):
             key, value = v.split('=')
 
-            parsed[key] = unquote(value).decode()
+            parsed[key] = _unquote_plus(value)
 
         return parsed
 

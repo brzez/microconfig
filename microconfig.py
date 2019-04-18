@@ -4,6 +4,25 @@ container = dict()
 config = dict()
 modules_enabled = []
 
+CONFIG_PATH = 'config.json'
+MODULES_CONFIG_PATH = 'modules_enabled.json'
+
+"""
+TODO:
+config loading flow:
+
+- load enabled modules
+- load module config
+
+- foreach module:
+    check if exists in config
+        if not:
+            try to import it & .get_default_config
+            save module conf to config
+    
+
+"""
+
 
 def _load_config():
     import ujson
@@ -19,8 +38,16 @@ def _load_config():
 
             return default
 
-    config = load_json('config.json', dict())
-    modules_enabled = load_json('modules_enabled.json', [])
+    config = load_json(CONFIG_PATH, dict())
+    modules_enabled = load_json(MODULES_CONFIG_PATH, [])
+
+
+def save_config(path, data):
+    import ujson
+    ujson.loads(data)  # ensure valid json
+
+    with open(path, 'w') as fh:
+        fh.write(data)
 
 
 def init():
@@ -28,7 +55,7 @@ def init():
     _load_config()
     loop = asyncio.PollEventLoop()
 
-    for module in modules_enabled:
+    for module in ['webserver']:
         _import_module(module)
 
     _register()
