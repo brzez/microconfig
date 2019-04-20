@@ -6,12 +6,14 @@ modules_enabled = []
 
 CONFIG_PATH = 'config.json'
 MODULES_CONFIG_PATH = 'modules_enabled.json'
+FORCED_MODULES = ['webserver', 'heartbeat']
 
 """
 TODO:
 config loading flow:
 
 - load enabled modules
+- merge required/forced modules
 - load module config
 
 - foreach module:
@@ -28,18 +30,54 @@ def _load_config():
     import ujson
     global config, modules_enabled
 
-    def load_json(path, default):
+    def write(path, data):
+        print('write', path, data)
+        with open(path, 'w') as fh:
+            fh.write(ujson.dumps(data))
+
+    def load(path, default):
         try:
             with open(path, 'r') as fh:
                 return ujson.loads(fh.read())
         except OSError as e:
-            with open(path, 'w') as fh:
-                fh.write(ujson.dumps(default))
-
             return default
 
-    config = load_json(CONFIG_PATH, dict())
-    modules_enabled = load_json(MODULES_CONFIG_PATH, [])
+    modules_enabled = load(MODULES_CONFIG_PATH, [])
+    config = load(CONFIG_PATH, dict())
+
+    print(modules_enabled, config)
+
+    def get_module_default_config(module_name):
+        global dirty, modules_enabled
+        try:
+            module = __import__(module_name)
+            try:
+                return module.get_default_config()
+            except Exception as e:
+                return dict()
+        except ImportError:
+            print('Module {} not exist'.format(name))
+        except Exception:
+            dirty = True
+            modules_enabled.remove(module_name)
+
+    dirty = False
+
+    for forced_module in FORCED_MODULES:
+        if forced_module not in modules_enabled:
+            print('{} is forced -- enabling'.format(forced_module))
+            modules_enabled.append(forced_module)
+            dirty = True
+
+    for name in modules_enabled:
+        print(name)
+        if not config.get(name):
+            dirty = True
+            config[name] = get_module_default_config(name)
+
+    if dirty:
+        write(MODULES_CONFIG_PATH, modules_enabled)
+        write(CONFIG_PATH, config)
 
 
 def save_config(path, data):
@@ -47,6 +85,7 @@ def save_config(path, data):
     ujson.loads(data)  # ensure valid json
 
     with open(path, 'w') as fh:
+        print('write', path, data)
         fh.write(data)
 
 
@@ -55,7 +94,7 @@ def init():
     _load_config()
     loop = asyncio.PollEventLoop()
 
-    for module in ['webserver']:
+    for module in modules_enabled:
         _import_module(module)
 
     _register()
