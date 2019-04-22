@@ -1,5 +1,6 @@
 import network
 
+
 def do_connect(ssid, password):
     sta_if = network.WLAN(network.STA_IF)
     if not sta_if.isconnected():
@@ -41,3 +42,9 @@ def init():
     print(sta_if.active(), sta_if.ifconfig())
 
     access_point_iface.active(True)
+
+
+def _free():
+    import gc
+    gc.collect()
+    print('====== free mem {}'.format(gc.mem_free()))

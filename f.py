@@ -4,7 +4,7 @@ cwd = '.'
 
 
 def rm(path, isdir):
-    print('rm {}'.format(path))
+    print('--- rm {}'.format(path))
     if isdir:
         for name, type, inode, size in os.ilistdir(path):
             isdir = True if type == 0x4000 else False

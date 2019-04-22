@@ -1,4 +1,5 @@
 import uasyncio as asyncio
+from misc import _free
 
 container = dict()
 config = dict()
@@ -6,7 +7,7 @@ modules_enabled = []
 
 CONFIG_PATH = 'config.json'
 MODULES_CONFIG_PATH = 'modules_enabled.json'
-FORCED_MODULES = ['webserver', 'heartbeat']
+FORCED_MODULES = ['webserver', 'heartbeat', 'microconfig_web']
 
 """
 TODO:
@@ -70,10 +71,10 @@ def _load_config():
             dirty = True
 
     for name in modules_enabled:
-        print(name)
         if not config.get(name):
             dirty = True
             config[name] = get_module_default_config(name)
+            _free()
 
     if dirty:
         write(MODULES_CONFIG_PATH, modules_enabled)
@@ -96,6 +97,7 @@ def init():
 
     for module in modules_enabled:
         _import_module(module)
+        _free()
 
     _register()
     _boot(loop)
@@ -108,6 +110,7 @@ def _register():
         try:
             print('{} - register'.format(name))
             module.register(config.get(name, dict()))
+            _free()
         except AttributeError:
             print('{} has no register()'.format(name))
 
@@ -118,6 +121,7 @@ def _boot(loop):
         try:
             print('{} - boot'.format(name))
             module.boot(container, loop)
+            _free()
         except AttributeError as e:
             print('{} has no boot()'.format(name))
             print(e)
@@ -129,6 +133,7 @@ def _cleanup(loop):
         try:
             print('{} - cleanup'.format(name))
             module.cleanup(container, loop)
+            _free()
         except AttributeError as e:
             print('{} has no cleanup()'.format(name))
             print(e)
@@ -139,7 +144,7 @@ def _import_module(name):
     print('Loading module', name)
     try:
         module = __import__(name)
-
+        _free()
         container[name] = module
     except Exception as e:
         print(e)
