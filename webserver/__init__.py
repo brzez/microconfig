@@ -10,10 +10,20 @@ except:
     import socket
 
 
+# deprecated
 def render_template(name, **kwargs):
     with open(name, 'r') as file:
         content = file.read()
         return content.format(**kwargs)
+
+
+def async_template(name, **kwargs):
+    async def _write_async_template(writer):
+        with open(name, 'r') as file:
+            for line in file:
+                await writer.awrite(line.format(**kwargs))
+
+    return _write_async_template
 
 
 html_escape_table = {
@@ -93,7 +103,9 @@ class Response:
         await writer.awrite(b'HTTP/1.1 200 OK\n')
         await writer.awrite(b'Content-Type: text/html\n')
         await writer.awrite(b'Connection: close\n\n')
-        if self.content:
+        if self.content and callable(self.content):
+            await self.content(writer)
+        elif self.content:
             await writer.awrite(self.content)
 
 

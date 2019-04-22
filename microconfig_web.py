@@ -1,14 +1,14 @@
-from microconfig import init, save_config, CONFIG_PATH, MODULES_CONFIG_PATH, _load_config
-from webserver import route, html_escape, render_template
+from microconfig import save_config, CONFIG_PATH, MODULES_CONFIG_PATH, _load_config
+from webserver import route, html_escape, async_template
 
 
 def render_form(response):
     import microconfig
     import ujson
 
-    response.content = render_template('views/microconfig.html',
-                                       modules_enabled=html_escape(ujson.dumps(microconfig.modules_enabled)),
-                                       config=html_escape(ujson.dumps(microconfig.config)))
+    response.content = async_template('views/microconfig.html',
+                                      modules_enabled=html_escape(ujson.dumps(microconfig.modules_enabled)),
+                                      config=html_escape(ujson.dumps(microconfig.config)))
 
 
 @route('/', 'get')
