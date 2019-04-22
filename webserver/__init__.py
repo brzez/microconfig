@@ -1,6 +1,7 @@
 import uselect as select
 import uasyncio as asyncio
 
+from misc import _free
 from webserver.unquote import _unquote_plus
 
 try:
@@ -160,7 +161,6 @@ class WebServer:
             await asyncio.sleep_ms(200)
 
     async def handle_client(self, client_socket):
-        self.socks.append(client_socket)
         reader = asyncio.StreamReader(client_socket)
         writer = asyncio.StreamWriter(client_socket, {})
 
@@ -174,15 +174,13 @@ class WebServer:
             self.router.handle(request, response)
 
             await response.write(writer)
+            await writer.aclose()
+            # await reader.aclose()
+            client_socket.close()
+            _free()
 
         except OSError:
             pass
-
-        # wait some time to prevent connection reset
-        await asyncio.sleep(1)
-
-        client_socket.close()
-        self.socks.remove(client_socket)
 
     def close(self):
         self.poller.unregister(self.server_socket)

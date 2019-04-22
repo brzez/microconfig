@@ -1,4 +1,5 @@
 import uasyncio as asyncio
+
 from misc import _free
 
 container = dict()
@@ -8,23 +9,6 @@ modules_enabled = []
 CONFIG_PATH = 'config.json'
 MODULES_CONFIG_PATH = 'modules_enabled.json'
 FORCED_MODULES = ['webserver', 'heartbeat', 'microconfig_web']
-
-"""
-TODO:
-config loading flow:
-
-- load enabled modules
-- merge required/forced modules
-- load module config
-
-- foreach module:
-    check if exists in config
-        if not:
-            try to import it & .get_default_config
-            save module conf to config
-    
-
-"""
 
 
 def _load_config():

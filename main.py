@@ -1,38 +1,25 @@
 from microconfig import init
+from mqtt import subscribe
+from webserver import route
 
 
 def test():
     init()
 
-# init()
-# from webserver.form import form
-# from webserver import redirect, route, render_template, runserver
-#
-# from machine import Pin
-#
-# d2 = Pin(4, Pin.OUT)
-#
-#
-# @route('/')
-# def get_index(request, response):
-#     response.content = render_template('page.html')
-#
-#
-# @route('/on')
-# def get_on(request, response):
-#     d2.value(1)
-#     response.content = 'on' + redirect('/')
-#
-#
-# @route('/off')
-# def get_on(request, response):
-#     d2.value(0)
-#     response.content = 'off' + redirect('/')
-#
-#
-# @form('/form', dict(
-#     name=dict(type='text'),
-#     password=dict(type='password'),
-# ), 'form.html')
-# def handle_form(data):
-#     print('form', data)
+
+@subscribe('foo')
+def asd(message):
+    print('message from topic {}'.format(message))
+
+
+@subscribe('bar')
+def basd(message):
+    print('message from topic {}'.format(message))
+
+
+@route('/foo')
+def foo(request, response):
+    response.content = 'foo'
+
+
+test()
