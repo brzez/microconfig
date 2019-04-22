@@ -2,6 +2,10 @@ PORT=/dev/ttyUSB0
 
 ampy -p $PORT put main.py
 ampy -p $PORT put microconfig.py
+ampy -p $PORT mkdir mqtt
+ampy -p $PORT put mqtt/__init__.py ./mqtt/__init__.py
+ampy -p $PORT put mqtt/umqttsimple.py ./mqtt/umqttsimple.py
+exit 0
 ampy -p $PORT put info.py
 ampy -p $PORT put heartbeat.py
 ampy -p $PORT mkdir webserver
