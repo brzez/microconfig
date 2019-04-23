@@ -1,6 +1,6 @@
 import uasyncio as asyncio
 
-from mqtt.umqttsimple import MQTTClient
+from modules.mqtt.umqttsimple import MQTTClient
 
 mqtt_client = None
 subscribes = []

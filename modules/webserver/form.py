@@ -4,7 +4,7 @@ usage:
 def action(data):
     # handle data
 """
-from webserver.__init__ import server, render_template
+from modules.webserver import server, render_template
 
 
 def render_input(id_attr, name, data, value):

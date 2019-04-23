@@ -8,7 +8,16 @@ modules_enabled = []
 
 CONFIG_PATH = 'config.json'
 MODULES_CONFIG_PATH = 'modules_enabled.json'
-FORCED_MODULES = ['webserver', 'heartbeat', 'microconfig_web']
+FORCED_MODULES = ['modules.webserver', 'modules.heartbeat', 'modules.microconfig_web']
+
+
+def import_module(path):
+    module = __import__(path)
+
+    for segment in path.split('.')[1:]:
+        module = getattr(module, segment)
+
+    return module
 
 
 def _load_config():
@@ -35,7 +44,7 @@ def _load_config():
     def get_module_default_config(module_name):
         global dirty, modules_enabled
         try:
-            module = __import__(module_name)
+            module = import_module(module_name)
             try:
                 return module.get_default_config()
             except Exception as e:
@@ -127,7 +136,7 @@ def _cleanup(loop):
 def _import_module(name):
     print('Loading module', name)
     try:
-        module = __import__(name)
+        module = import_module(name)
         _free()
         container[name] = module
     except Exception as e:

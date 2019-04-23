@@ -1,5 +1,5 @@
 from microconfig import save_config, CONFIG_PATH, MODULES_CONFIG_PATH, _load_config
-from webserver import route, html_escape, async_template
+from modules.webserver import route, html_escape, async_template
 
 
 def render_form(response):
