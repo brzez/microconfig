@@ -6,7 +6,7 @@ PORT = '/dev/ttyUSB0'
 OUT_DIR = './build'
 
 FILES = [
-    ('main.py', 'main.mpy'),
+    ('main.py', 'main.py'),
     ('microconfig_web.py', 'microconfig_web.mpy'),
     ('microconfig.py', 'microconfig.mpy'),
     ('mqtt/__init__.py', './mqtt/__init__.mpy'),
@@ -55,9 +55,9 @@ def main():
         else:
             path, destination = file
 
-        ext = os.path.splitext(path)[1]
+        ext = os.path.splitext(destination)[1]
 
-        if ext == '.py':
+        if ext == '.mpy':
             path = cross_compile(path)
 
         upload(path, destination)

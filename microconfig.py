@@ -140,5 +140,8 @@ def _run(loop):
         loop.run_forever()
     except KeyboardInterrupt:
         print('Interrupted')  # This mechanism doesn't work on Unix build.
+    except MemoryError:
+        import machine
+        machine.reset()
     finally:
         _cleanup(loop)
