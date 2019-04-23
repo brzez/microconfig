@@ -42,6 +42,22 @@ def upload(file, destination):
     subprocess.call(['ampy', '-p', PORT, 'put', file, destination])
 
 
+ensured_dirs = []
+
+
+def ensure_dir_exists(path):
+    global ensured_dirs
+    current_path = ''
+    for directory in os.path.dirname(path).split('/'):
+        current_path = os.path.join(current_path, directory)
+        if current_path in ensured_dirs:
+            continue
+
+        subprocess.call(['ampy', '-p', PORT, 'mkdir', current_path])
+
+        ensured_dirs.append(current_path)
+
+
 def main():
     try:
         os.makedirs(OUT_DIR)
@@ -56,6 +72,7 @@ def main():
             path, destination = file
 
         ext = os.path.splitext(destination)[1]
+        ensure_dir_exists(destination)
 
         if ext == '.mpy':
             path = cross_compile(path)
