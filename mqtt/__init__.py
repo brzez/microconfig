@@ -59,6 +59,10 @@ def get_default_config():
     )
 
 
+def publish(topic, message):
+    mqtt_client.publish(topic, message)
+
+
 def subscribe(topic):
     def wrap(f):
         if isinstance(topic, str):
