@@ -8,7 +8,12 @@ modules_enabled = []
 
 CONFIG_PATH = 'config.json'
 MODULES_CONFIG_PATH = 'modules_enabled.json'
-FORCED_MODULES = ['modules.webserver', 'modules.heartbeat', 'modules.microconfig_web']
+FORCED_MODULES = [
+    'modules.ensure_net',
+    'modules.webserver',
+    'modules.heartbeat',
+    'modules.microconfig_web'
+]
 
 
 def import_module(path):
