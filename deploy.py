@@ -21,6 +21,9 @@ FILES = [
     ('modules/webserver/__init__.py', 'modules/webserver/__init__.mpy'),
     ('modules/webserver/form.py', 'modules/webserver/form.mpy'),
     ('modules/webserver/unquote.py', 'modules/webserver/unquote.mpy'),
+
+    ('modules/sht30/__init__.py', 'modules/sht30/__init__.mpy'),
+    ('modules/sht30/sht30.py', 'modules/sht30/sht30.mpy'),
 ]
 
 
