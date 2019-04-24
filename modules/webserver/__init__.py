@@ -215,9 +215,9 @@ def redirect(path):
     return '<script>window.location="{}"</script>'.format(path)
 
 
-def boot(container, loop):
+def boot(loop):
     loop.create_task(server.run(loop))
 
 
-def cleanup(container, loop):
+def cleanup(loop):
     server.close()

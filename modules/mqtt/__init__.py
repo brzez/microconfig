@@ -39,7 +39,7 @@ async def tick():
         await asyncio.sleep(10)
 
 
-def cleanup(container, loop):
+def cleanup(loop):
     global mqtt_client
 
     if not mqtt_client:

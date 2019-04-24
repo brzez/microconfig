@@ -21,6 +21,6 @@ async def heartbeat(tms):
         await asyncio.sleep_ms(tms)
 
 
-def boot(container, loop):
+def boot(loop):
     loop.create_task(heartbeat(1000))
 

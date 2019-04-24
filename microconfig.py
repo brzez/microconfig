@@ -2,10 +2,6 @@ import uasyncio as asyncio
 
 from misc import _free
 
-container = dict()
-config = dict()
-modules_enabled = []
-
 CONFIG_PATH = 'config.json'
 MODULES_CONFIG_PATH = 'modules_enabled.json'
 FORCED_MODULES = [
@@ -16,6 +12,63 @@ FORCED_MODULES = [
 ]
 
 
+def load_config():
+    import ujson
+
+    def load_config(path, default):
+        try:
+            with open(path, 'r') as fh:
+                return ujson.loads(fh.read())
+        except OSError:
+            return default
+
+    def write_config(path, data):
+        with open(path, 'w') as fh:
+            fh.write(ujson.dumps(data))
+
+    modules_enabled = load_config(MODULES_CONFIG_PATH, [])
+    config = load_config(CONFIG_PATH, dict())
+
+    modules_dirty = False
+    config_dirty = False
+
+    for forced_module in FORCED_MODULES:
+        if forced_module not in modules_enabled:
+            modules_enabled.append(forced_module)
+            modules_dirty = True
+
+    # validate modules
+    for module in modules_enabled:
+        try:
+            import_module(module)
+        except ImportError:
+            print('Module {} invalid'.format(module))
+            modules_enabled.remove(module)
+            modules_dirty = True
+
+    for module in modules_enabled:
+        if module not in config:
+            default_config = call_module_method(module, 'get_default_config')
+            if default_config:
+                config[module] = default_config
+                config_dirty = True
+
+    if config_dirty:
+        write_config(CONFIG_PATH, config)
+    if modules_dirty:
+        write_config(MODULES_CONFIG_PATH, modules_enabled)
+        
+    return modules_enabled, config
+
+
+def call_module_method(module, method, default=None, args=None):
+    try:
+        m = import_module(module)
+        return getattr(m, method)(**args)
+    except AttributeError:
+        return default
+
+
 def import_module(path):
     module = __import__(path)
 
@@ -23,60 +76,6 @@ def import_module(path):
         module = getattr(module, segment)
 
     return module
-
-
-def _load_config():
-    import ujson
-    global config, modules_enabled
-
-    def write(path, data):
-        print('write', path, data)
-        with open(path, 'w') as fh:
-            fh.write(ujson.dumps(data))
-
-    def load(path, default):
-        try:
-            with open(path, 'r') as fh:
-                return ujson.loads(fh.read())
-        except OSError as e:
-            return default
-
-    modules_enabled = load(MODULES_CONFIG_PATH, [])
-    config = load(CONFIG_PATH, dict())
-
-    print(modules_enabled, config)
-
-    def get_module_default_config(module_name):
-        global dirty, modules_enabled
-        try:
-            module = import_module(module_name)
-            try:
-                return module.get_default_config()
-            except Exception as e:
-                return dict()
-        except ImportError:
-            print('Module {} not exist'.format(name))
-        except Exception:
-            dirty = True
-            modules_enabled.remove(module_name)
-
-    dirty = False
-
-    for forced_module in FORCED_MODULES:
-        if forced_module not in modules_enabled:
-            print('{} is forced -- enabling'.format(forced_module))
-            modules_enabled.append(forced_module)
-            dirty = True
-
-    for name in modules_enabled:
-        if not config.get(name):
-            dirty = True
-            config[name] = get_module_default_config(name)
-            _free()
-
-    if dirty:
-        write(MODULES_CONFIG_PATH, modules_enabled)
-        write(CONFIG_PATH, config)
 
 
 def save_config(path, data):
@@ -90,62 +89,55 @@ def save_config(path, data):
 
 def init():
     print('Microconfig init')
-    _load_config()
+    modules_enabled, config = load_config()
+    _free()
+
     loop = asyncio.PollEventLoop()
 
-    for module in modules_enabled:
-        _import_module(module)
+    imported_modules = []
+
+    for name in modules_enabled:
+        imported_modules.append((name, import_module(name)))
         _free()
 
-    _register()
-    _boot(loop)
+    _register(imported_modules, config)
+    _boot(imported_modules, loop)
     _run(loop)
 
 
-def _register():
+def _register(modules, config):
     print('Registering...')
-    for (name, module) in container.items():
+    for name, module in modules:
         try:
-            print('{} - register'.format(name))
             module.register(config.get(name, dict()))
             _free()
         except AttributeError:
             print('{} has no register()'.format(name))
 
 
-def _boot(loop):
+def _boot(modules, loop):
     print('Boot...')
-    for (name, module) in container.items():
+    for name, module in modules:
         try:
             print('{} - boot'.format(name))
-            module.boot(container, loop)
+            module.boot(loop)
             _free()
         except AttributeError as e:
             print('{} has no boot()'.format(name))
             print(e)
 
 
-def _cleanup(loop):
+def _cleanup(modules, loop):
     print('Cleanup')
-    for (name, module) in container.items():
+    for name, module in modules:
         try:
             print('{} - cleanup'.format(name))
-            module.cleanup(container, loop)
+            module.cleanup(loop)
             _free()
         except AttributeError as e:
             print('{} has no cleanup()'.format(name))
             print(e)
     loop.stop()
-
-
-def _import_module(name):
-    print('Loading module', name)
-    try:
-        module = import_module(name)
-        _free()
-        container[name] = module
-    except Exception as e:
-        print(e)
 
 
 def _run(loop):
