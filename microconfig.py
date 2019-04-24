@@ -102,7 +102,7 @@ def init():
 
     _register(imported_modules, config)
     _boot(imported_modules, loop)
-    _run(loop)
+    _run(imported_modules, loop)
 
 
 def _register(modules, config):
@@ -110,6 +110,7 @@ def _register(modules, config):
     for name, module in modules:
         try:
             module.register(config.get(name, dict()))
+            print('- {}'.format(name))
             _free()
         except AttributeError:
             print('{} has no register()'.format(name))
@@ -119,28 +120,26 @@ def _boot(modules, loop):
     print('Boot...')
     for name, module in modules:
         try:
-            print('{} - boot'.format(name))
             module.boot(loop)
+            print('- {}'.format(name))
             _free()
         except AttributeError as e:
             print('{} has no boot()'.format(name))
-            print(e)
 
 
 def _cleanup(modules, loop):
     print('Cleanup')
     for name, module in modules:
         try:
-            print('{} - cleanup'.format(name))
             module.cleanup(loop)
+            print('- {}'.format(name))
             _free()
         except AttributeError as e:
             print('{} has no cleanup()'.format(name))
-            print(e)
     loop.stop()
 
 
-def _run(loop):
+def _run(modules, loop):
     print('Running...')
     try:
         loop.run_forever()
@@ -150,4 +149,4 @@ def _run(loop):
         import machine
         machine.reset()
     finally:
-        _cleanup(loop)
+        _cleanup(modules, loop)

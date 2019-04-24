@@ -15,6 +15,5 @@ def register(config):
         ap_if.active(False)
     else:
         ap_if.active(True)
-        sleep(2)
-        print('AP active', sta_if.ifconfig())
+        print('AP active')
 
