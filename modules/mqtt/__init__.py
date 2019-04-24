@@ -20,7 +20,7 @@ def sub_cb(topic, msg):
             f(msg)
 
 
-def boot(container, loop):
+def boot(loop):
     try:
         mqtt_client.connect()
         print('mqtt connected')

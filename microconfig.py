@@ -41,8 +41,9 @@ def load_config():
     for module in modules_enabled:
         try:
             import_module(module)
-        except ImportError:
+        except ImportError as e:
             print('Module {} invalid'.format(module))
+            print(e)
             modules_enabled.remove(module)
             modules_dirty = True
 
@@ -61,11 +62,11 @@ def load_config():
     return modules_enabled, config
 
 
-def call_module_method(module, method, default=None, args=None):
+def call_module_method(module, method, default=None, args=()):
     try:
         m = import_module(module)
-        return getattr(m, method)(**args)
-    except AttributeError:
+        return getattr(m, method)(*args)
+    except AttributeError as e:
         return default
 
 
