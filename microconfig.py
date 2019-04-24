@@ -7,8 +7,10 @@ MODULES_CONFIG_PATH = 'modules_enabled.json'
 FORCED_MODULES = [
     'modules.ensure_net',
     'modules.webserver',
-    'modules.heartbeat',
-    'modules.microconfig_web'
+    'modules.microconfig_web',
+
+    'modules.mqtt',
+    'modules.sht30',
 ]
 
 
