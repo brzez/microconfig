@@ -6,21 +6,21 @@ PORT = '/dev/ttyUSB0'
 OUT_DIR = './build'
 
 FILES = [
-    # ('main.py', 'main.py'),
+    ('main.py', 'main.py'),
     ('microconfig.py', 'microconfig.mpy'),
-    # ('views/microconfig.html', './views/microconfig.html'),
-    # ('misc.py', 'misc.mpy'),
-    # ('f.py', 'f.mpy'),
-    #
-    # ('modules/ensure_net.py', 'modules/ensure_net.mpy'),
-    # ('modules/net_config.py', 'modules/net_config.mpy'),
-    # ('modules/mqtt/__init__.py', 'modules/mqtt/__init__.mpy'),
-    # ('modules/mqtt/umqttsimple.py', 'modules/mqtt/umqttsimple.mpy'),
-    # ('modules/microconfig_web.py', 'modules/microconfig_web.mpy'),
-    # ('modules/heartbeat.py', 'modules/heartbeat.mpy'),
-    # ('modules/webserver/__init__.py', 'modules/webserver/__init__.mpy'),
-    # ('modules/webserver/form.py', 'modules/webserver/form.mpy'),
-    # ('modules/webserver/unquote.py', 'modules/webserver/unquote.mpy'),
+    ('views/microconfig.html', './views/microconfig.html'),
+    ('misc.py', 'misc.mpy'),
+    ('f.py', 'f.mpy'),
+
+    ('modules/ensure_net.py', 'modules/ensure_net.mpy'),
+    ('modules/net_config.py', 'modules/net_config.mpy'),
+    ('modules/mqtt/__init__.py', 'modules/mqtt/__init__.mpy'),
+    ('modules/mqtt/umqttsimple.py', 'modules/mqtt/umqttsimple.mpy'),
+    ('modules/microconfig_web.py', 'modules/microconfig_web.mpy'),
+    ('modules/heartbeat.py', 'modules/heartbeat.mpy'),
+    ('modules/webserver/__init__.py', 'modules/webserver/__init__.mpy'),
+    ('modules/webserver/form.py', 'modules/webserver/form.mpy'),
+    ('modules/webserver/unquote.py', 'modules/webserver/unquote.mpy'),
 ]
 
 
