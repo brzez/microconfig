@@ -14,6 +14,7 @@ def register(config):
         print('Network connected', sta_if.ifconfig())
         ap_if.active(False)
     else:
-        sta_if.active(True)
+        ap_if.active(True)
+        sleep(2)
         print('AP active', sta_if.ifconfig())
 
