@@ -2,6 +2,7 @@ import uasyncio as asyncio
 
 from misc import _free
 
+RESET_ON_EXCEPTION_WAIT = 10
 CONFIG_PATH = 'config.json'
 MODULES_CONFIG_PATH = 'modules_enabled.json'
 FORCED_MODULES = [
@@ -151,5 +152,10 @@ def _run(modules, loop):
     except MemoryError:
         import machine
         machine.reset()
+    except Exception as e:
+        print(e)
+        print('restarting in {}'.format(RESET_ON_EXCEPTION_WAIT))
+        import time
+        time.sleep(RESET_ON_EXCEPTION_WAIT)
     finally:
         _cleanup(modules, loop)
