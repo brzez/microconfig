@@ -41,6 +41,7 @@ def l(command='ls'):
                 while line:
                     print(line, end='')
                     line = fh.readline()
+                print()
 
     command = input('command (rm <file index> <file index>..., cd <abspath>, cat <index>):\n')
     l(command)
