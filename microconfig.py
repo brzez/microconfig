@@ -100,51 +100,57 @@ def init():
 
     imported_modules = []
 
+    print('Importing modules')
     for name in modules_enabled:
         imported_modules.append((name, import_module(name)))
+        print('- {}'.format(name))
         _free()
 
     _register(imported_modules, config)
     _boot(imported_modules, loop)
+    _free(verbose=True)
     _run(imported_modules, loop)
 
 
 def _register(modules, config):
-    print('Registering...')
+    print('Registering')
     for name, module in modules:
+        print('- {}'.format(name))
         try:
             module.register(config.get(name, dict()))
-            print('- {}'.format(name))
+            print('-- success')
             _free()
         except AttributeError:
-            print('{} has no register()'.format(name))
+            print('-- no register method')
 
 
 def _boot(modules, loop):
-    print('Boot...')
+    print('Boot')
     for name, module in modules:
+        print('- {}'.format(name))
         try:
             module.boot(loop)
-            print('- {}'.format(name))
+            print('-- success')
             _free()
         except AttributeError as e:
-            print('{} has no boot()'.format(name))
+            print('-- no boot method')
 
 
 def _cleanup(modules, loop):
     print('Cleanup')
     for name, module in modules:
+        print('- {}'.format(name))
         try:
             module.cleanup(loop)
-            print('- {}'.format(name))
+            print('-- success')
             _free()
         except AttributeError as e:
-            print('{} has no cleanup()'.format(name))
+            print('-- no cleanup method')
     loop.stop()
 
 
 def _run(modules, loop):
-    print('Running...')
+    print('Running')
     try:
         loop.run_forever()
     except KeyboardInterrupt:
