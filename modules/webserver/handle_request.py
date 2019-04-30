@@ -6,7 +6,7 @@ def handle_request(client, routes):
     content_length = None
 
     while True:
-        line = client.readline()
+        line = client.readline().lower()
 
         if not line or line == b'\r\n':
             break
@@ -27,9 +27,8 @@ def handle_request(client, routes):
     client.write(b'Connection: close\n\n')
 
     for _path, _method, f in routes:
-        if method != _method and path != path:
+        if not (method == _method and _path == path):
             continue
-
         return f(client, data)
 
     client.write(b'404')
@@ -44,15 +43,15 @@ def parse_request_data(data):
 
 
 def unquote(s):
-    r = s.split('%')
+    r = s.split(b'%')
     for i in range(1, len(r)):
         s = r[i]
         try:
-            r[i] = chr(int(s[:2], 16)) + s[2:]
+            r[i] = chr(int(s[:2], 16)).encode() + s[2:]
         except:
-            r[i] = '%' + s
-    return ''.join(r)
+            r[i] = b'%' + s
+    return b''.join(r)
 
 
 def _unquote_plus(s):
-    return unquote(s.replace('+', ' '))
+    return unquote(s.replace(b'+', b' '))
