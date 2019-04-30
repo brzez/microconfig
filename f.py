@@ -35,5 +35,13 @@ def l(command='ls'):
         if command == 'rm' and str(index) in args and input('remove {}? y\\n\n'.format(full_path)) == 'y':
             rm(full_path, isdir)
 
-    command = input('command (rm <file index> <file index>..., cd <abspath>):\n')
+        if command == 'cat' and str(index) in args:
+            with open(full_path, 'r') as fh:
+                line = fh.readline()
+                while line:
+                    print(line, end='')
+                    line = fh.readline()
+                print()
+
+    command = input('command (rm <file index> <file index>..., cd <abspath>, cat <index>):\n')
     l(command)
