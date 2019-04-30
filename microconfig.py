@@ -16,19 +16,21 @@ FORCED_MODULES = [
 def load_config():
     import ujson
 
-    def load_config(path, default):
+    def _load_config(path, default):
         try:
             with open(path, 'r') as fh:
                 return ujson.loads(fh.read())
         except OSError:
+            return default
+        except ValueError:
             return default
 
     def write_config(path, data):
         with open(path, 'w') as fh:
             fh.write(ujson.dumps(data))
 
-    modules_enabled = load_config(MODULES_CONFIG_PATH, [])
-    config = load_config(CONFIG_PATH, dict())
+    modules_enabled = _load_config(MODULES_CONFIG_PATH, [])
+    config = _load_config(CONFIG_PATH, dict())
 
     modules_dirty = False
     config_dirty = False
