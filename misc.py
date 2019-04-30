@@ -44,7 +44,8 @@ def init():
     access_point_iface.active(True)
 
 
-def _free():
+def _free(verbose=False):
     import gc
     gc.collect()
-    print('====== free mem {}'.format(gc.mem_free()))
+    if verbose:
+        print('====== free mem {}'.format(gc.mem_free()))

@@ -9,6 +9,7 @@ FILES = [
     ('main.py', 'main.py'),
     ('microconfig.py', 'microconfig.mpy'),
     ('views/microconfig.html', './views/microconfig.html'),
+    ('views/form.html', './views/form.html'),
     ('misc.py', 'misc.mpy'),
     ('f.py', 'f.mpy'),
 
@@ -19,8 +20,7 @@ FILES = [
     ('modules/microconfig_web.py', 'modules/microconfig_web.mpy'),
     ('modules/heartbeat.py', 'modules/heartbeat.mpy'),
     ('modules/webserver/__init__.py', 'modules/webserver/__init__.mpy'),
-    ('modules/webserver/form.py', 'modules/webserver/form.mpy'),
-    ('modules/webserver/unquote.py', 'modules/webserver/unquote.mpy'),
+    ('modules/webserver/handle_request.py', 'modules/webserver/handle_request.mpy'),
     ('modules/printer_switch.py', 'modules/printer_switch.mpy'),
 ]
 
