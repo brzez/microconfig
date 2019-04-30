@@ -16,6 +16,23 @@ def accept_handler(conn):
     _free()
 
 
+def template(sock, name, **kwargs):
+    with open(name, 'r') as file:
+        for line in file:
+            sock.write(line.format(**kwargs))
+
+
+def html_escape(text):
+    html_escape_table = {
+        "&": "&amp;",
+        '"': "&quot;",
+        "'": "&apos;",
+        ">": "&gt;",
+        "<": "&lt;",
+    }
+    return "".join(html_escape_table.get(c, c) for c in text)
+
+
 async def runserver(loop):
     import socket
     global server_socket
