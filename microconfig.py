@@ -6,9 +6,9 @@ RESET_ON_EXCEPTION_WAIT = 10
 CONFIG_PATH = 'config.json'
 MODULES_CONFIG_PATH = 'modules_enabled.json'
 FORCED_MODULES = [
+    'modules.global',
     'modules.ensure_net',
     'modules.webserver',
-    'modules.heartbeat',
     'modules.microconfig_web'
 ]
 
