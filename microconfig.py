@@ -5,11 +5,13 @@ from misc import _free
 RESET_ON_EXCEPTION_WAIT = 10
 CONFIG_PATH = 'config.json'
 MODULES_CONFIG_PATH = 'modules_enabled.json'
+
 FORCED_MODULES = [
     'modules.global',
-    'modules.ensure_net',
+    'modules.net',
     'modules.webserver',
-    'modules.microconfig_web'
+    'modules.microconfig_web',
+    'modules.mqtt',
 ]
 
 
@@ -61,7 +63,7 @@ def load_config():
         write_config(CONFIG_PATH, config)
     if modules_dirty:
         write_config(MODULES_CONFIG_PATH, modules_enabled)
-        
+
     return modules_enabled, config
 
 
@@ -159,7 +161,7 @@ def _run(modules, loop):
         import machine
         machine.reset()
     except Exception as e:
-        print(e)
+        print(e, type(e))
         print('restarting in {}'.format(RESET_ON_EXCEPTION_WAIT))
         import time
         time.sleep(RESET_ON_EXCEPTION_WAIT)

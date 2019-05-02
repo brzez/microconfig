@@ -5,13 +5,27 @@ from modules.mqtt.umqttsimple import MQTTClient
 mqtt_client = None
 subscribes = []
 
+config = None
 
-def register(config):
+
+def do_connect():
     import machine
     import ubinascii
     global mqtt_client
     mqtt_client = MQTTClient(ubinascii.hexlify(machine.unique_id()), config.get('server'), **config.get('kwargs'))
     mqtt_client.set_callback(sub_cb)
+
+    mqtt_client.connect()
+    print('mqtt connected')
+    for (topic, f) in subscribes:
+        mqtt_client.subscribe(topic)
+
+
+def register(_config):
+    global config
+
+    config = _config
+    do_connect()
 
 
 def sub_cb(topic, msg):
@@ -22,11 +36,7 @@ def sub_cb(topic, msg):
 
 def boot(loop):
     try:
-        mqtt_client.connect()
-        print('mqtt connected')
-        for (topic, f) in subscribes:
-            mqtt_client.subscribe(topic)
-
+        do_connect()
         loop.create_task(tick())
 
     except Exception as e:
@@ -34,9 +44,19 @@ def boot(loop):
 
 
 async def tick():
+    global mqtt_client
+
     while True:
-        mqtt_client.check_msg()
-        await asyncio.sleep(10)
+        try:
+            if mqtt_client is None:
+                do_connect()
+            else:
+                mqtt_client.check_msg()
+        except OSError as e:
+            print(e, type(e))
+            mqtt_client = None
+
+        await asyncio.sleep(1)
 
 
 def cleanup(loop):

@@ -14,7 +14,7 @@ FILES = [
     ('f.py', 'f.mpy'),
 
     ('modules/global.py', 'modules/global.mpy'),
-    ('modules/ensure_net.py', 'modules/ensure_net.mpy'),
+    ('modules/net.py', 'modules/net.mpy'),
     ('modules/net_config.py', 'modules/net_config.mpy'),
     ('modules/mqtt/__init__.py', 'modules/mqtt/__init__.mpy'),
     ('modules/mqtt/umqttsimple.py', 'modules/mqtt/umqttsimple.mpy'),
