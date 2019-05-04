@@ -1,17 +1,17 @@
 import uasyncio as asyncio
 
-from misc import _free
+from microconfig.misc import _free
 
 RESET_ON_EXCEPTION_WAIT = 10
 CONFIG_PATH = 'config.json'
 MODULES_CONFIG_PATH = 'modules_enabled.json'
 
 FORCED_MODULES = [
-    'modules.global',
-    'modules.net',
-    'modules.webserver',
-    'modules.microconfig_web',
-    'modules.mqtt',
+    'microconfig.modules.global',
+    'microconfig.modules.net',
+    'microconfig.modules.webserver',
+    'microconfig.modules.microconfig_web',
+    'microconfig.modules.mqtt',
 ]
 
 

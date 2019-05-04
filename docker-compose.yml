@@ -1,0 +1,7 @@
+version: "3.3"
+services:
+  builder:
+    build: .
+    volumes:
+      - ./microconfig:/home/builder/micropython/ports/esp8266/modules/microconfig
+

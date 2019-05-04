@@ -37,7 +37,7 @@ async def tick():
         if not sta_if.isconnected():
             print('no network')
             if config.get('reconnect', False):
-                import misc
+                from microconfig import misc
                 misc.do_connect(config['ssid'], config['password'])
 
         await asyncio.sleep(10)

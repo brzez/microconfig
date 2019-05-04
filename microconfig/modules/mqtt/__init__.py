@@ -1,6 +1,6 @@
 import uasyncio as asyncio
 
-from modules.mqtt.umqttsimple import MQTTClient
+from microconfig.modules.mqtt.umqttsimple import MQTTClient
 
 mqtt_client = None
 subscribes = []
@@ -12,20 +12,25 @@ def do_connect():
     import machine
     import ubinascii
     global mqtt_client
-    mqtt_client = MQTTClient(ubinascii.hexlify(machine.unique_id()), config.get('server'), **config.get('kwargs'))
-    mqtt_client.set_callback(sub_cb)
+    client = MQTTClient(ubinascii.hexlify(machine.unique_id()), config.get('server'), **config.get('kwargs'))
+    client.set_callback(sub_cb)
 
-    mqtt_client.connect()
+    client.connect()
     print('mqtt connected')
     for (topic, f) in subscribes:
-        mqtt_client.subscribe(topic)
+        client.subscribe(topic)
+
+    mqtt_client = client
 
 
 def register(_config):
     global config
 
     config = _config
-    do_connect()
+    try:
+        do_connect()
+    except OSError:
+        pass
 
 
 def sub_cb(topic, msg):

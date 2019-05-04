@@ -1,18 +1,18 @@
-from misc import _free
+from microconfig.misc import _free
 
 routes = []
 
 
 def accept_handler(conn):
-    import modules.webserver.handle_request
+    import microconfig.modules.webserver.handle_request
     import sys
     client, addr = conn.accept()
     print('{} connected'.format(addr))
-    modules.webserver.handle_request.handle_request(client, routes)
+    microconfig.modules.webserver.handle_request.handle_request(client, routes)
     client.close()
     _free()
-    del modules.webserver.handle_request
-    del sys.modules['modules.webserver.handle_request']
+    del microconfig.modules.webserver.handle_request
+    del sys.modules['microconfig.modules.webserver.handle_request']
     _free()
 
 

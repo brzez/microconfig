@@ -7,21 +7,21 @@ OUT_DIR = './build'
 
 FILES = [
     ('main.py', 'main.py'),
-    ('microconfig.py', 'microconfig.mpy'),
-    ('views/microconfig.html', './views/microconfig.html'),
-    ('views/form.html', './views/form.html'),
-    ('misc.py', 'misc.mpy'),
-    ('f.py', 'f.mpy'),
+    ('microconfig/microconfig.py', 'microconfig/microconfig.mpy'),
+    ('microconfig/views/microconfig.html', 'microconfig/./views/microconfig.html'),
+    ('microconfig/views/form.html', 'microconfig/./views/form.html'),
+    ('microconfig/misc.py', 'microconfig/misc.mpy'),
+    ('microconfig/f.py', 'microconfig/f.mpy'),
 
-    ('modules/global.py', 'modules/global.mpy'),
-    ('modules/net.py', 'modules/net.mpy'),
-    ('modules/net_config.py', 'modules/net_config.mpy'),
-    ('modules/mqtt/__init__.py', 'modules/mqtt/__init__.mpy'),
-    ('modules/mqtt/umqttsimple.py', 'modules/mqtt/umqttsimple.mpy'),
-    ('modules/microconfig_web.py', 'modules/microconfig_web.mpy'),
-    ('modules/heartbeat.py', 'modules/heartbeat.mpy'),
-    ('modules/webserver/__init__.py', 'modules/webserver/__init__.mpy'),
-    ('modules/webserver/handle_request.py', 'modules/webserver/handle_request.mpy'),
+    ('microconfig/modules/global.py', 'microconfig/modules/global.mpy'),
+    ('microconfig/modules/net.py', 'microconfig/modules/net.mpy'),
+    ('microconfig/modules/net_config.py', 'microconfig/modules/net_config.mpy'),
+    ('microconfig/modules/mqtt/__init__.py', 'microconfig/modules/mqtt/__init__.mpy'),
+    ('microconfig/modules/mqtt/umqttsimple.py', 'microconfig/modules/mqtt/umqttsimple.mpy'),
+    ('microconfig/modules/microconfig_web.py', 'microconfig/modules/microconfig_web.mpy'),
+    ('microconfig/modules/heartbeat.py', 'microconfig/modules/heartbeat.mpy'),
+    ('microconfig/modules/webserver/__init__.py', 'microconfig/modules/webserver/__init__.mpy'),
+    ('microconfig/modules/webserver/handle_request.py', 'microconfig/modules/webserver/handle_request.mpy'),
 ]
 
 
